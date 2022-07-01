@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mixture {
+  id              String  @id @default(cuid())
+  // total size of a bottle
+  volume          Decimal @db.Decimal(10, 2)
+  // amount of liquid in a bottle
+  content         Decimal @db.Decimal(10, 2)
+  // amount of available space to be filled
+  available       Decimal @db.Decimal(10, 2)
+  // volume - content => amount of extra or missing liquid
+  diff            Decimal @db.Decimal(10, 2)
+  // amount of nicotine (mg/ml)
+  nicotine        Decimal @db.Decimal(10, 2)
+  nicotineToRound Int
+  // vg/pg ratio
+  vg              Decimal @db.Decimal(10, 2)
+  pg              Decimal @db.Decimal(10, 2)
+  // vg/pg in ml
+  vgToMl          Decimal @db.Decimal(10, 2)
+  // rounded VG ratio (for example 70 instead of 76)
+  vgToRound       Int
+  pgToMl          Decimal @db.Decimal(10, 2)
+  // rounded PG ratio (for example 70 instead of 76)
+  pgToRound       Int
+  aromaId         String
+
+  boosterId String?
+
+  boosterCount Int
+  baseId       String?
+
+  baseMl Decimal @db.Decimal(10, 2)
+
+
+
+
+  @@unique([aromaId, boosterId, baseId, nicotine])
+}
